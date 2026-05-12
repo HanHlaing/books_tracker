@@ -1,4 +1,4 @@
-name: book_tracker
+name: books_tracker
 description: Book Tracker — Clean Architecture + Local Storage
 publish_to: 'none'
 version: 1.0.0+1
@@ -9,9 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # Local storage
   shared_preferences: ^2.2.2
-  # State management
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.4
 
@@ -20,7 +18,25 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.4.8
   riverpod_generator: ^2.3.9
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.03
+  flutter_native_splash: ^2.4.0
 
 flutter:
   uses-material-design: true
+
+# ─────────────────────────────────────────────────────────────
+#  Native splash — run this command after saving:
+#  dart run flutter_native_splash:create
+#
+#  To undo:
+#  dart run flutter_native_splash:remove
+# ─────────────────────────────────────────────────────────────
+flutter_native_splash:
+  color: "#1A1A2E"
+  fullscreen: true
+  android: true
+  ios: true
+  web: false
+  android_12:
+    color: "#1A1A2E"
+    icon_background_color: "#1A1A2E"
