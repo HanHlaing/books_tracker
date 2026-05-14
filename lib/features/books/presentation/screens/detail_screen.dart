@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/platform/adaptive.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/entities/book.dart';
 import '../providers/book_provider.dart';
@@ -49,22 +51,54 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
   }
 
   Future<void> _delete() async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Remove book?'),
-        content: Text('Remove "${widget.book.title}" from your library?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remove', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
+    bool? confirm;
+
+    if (isIOS) {
+      confirm = await showCupertinoDialog<bool>(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+          title: const Text('Remove book?'),
+          content: Text(
+            'Remove "${widget.book.title}" from your library?'),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Remove'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      confirm = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Remove book?'),
+          content: Text(
+            'Remove "${widget.book.title}" from your library?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Remove',
+                style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      );
+    }
+
     if (confirm == true && mounted) {
-      await ref.read(bookListProvider.notifier).deleteBook(widget.book.id);
+      await ref
+          .read(bookListProvider.notifier)
+          .deleteBook(widget.book.id);
       if (mounted) Navigator.pop(context);
     }
   }
@@ -80,12 +114,16 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
             pinned: true,
             backgroundColor: accent,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+              icon: Icon(
+                isIOS ? CupertinoIcons.back : Icons.arrow_back_rounded,
+                color: Colors.white),
               onPressed: () => Navigator.pop(context),
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.delete_outline_rounded, color: Colors.white),
+                icon: Icon(
+                  isIOS ? CupertinoIcons.trash : Icons.delete_outline_rounded,
+                  color: Colors.white),
                 onPressed: _delete,
               ),
               const SizedBox(width: 8),
@@ -98,15 +136,21 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 40),
-                      Text(book.coverEmoji, style: const TextStyle(fontSize: 72)),
+                      Text(book.coverEmoji,
+                        style: const TextStyle(fontSize: 72)),
                       const SizedBox(height: 12),
-                      Text(book.title, style: const TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.w800,
-                        color: Colors.white, letterSpacing: -0.5),
+                      Text(book.title,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: -0.5),
                         textAlign: TextAlign.center),
                       const SizedBox(height: 4),
                       Text(book.author,
-                        style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.8))),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withOpacity(0.8))),
                     ],
                   ),
                 ),
@@ -123,7 +167,9 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                   Row(children: [
                     _Pill(label: book.genre, color: accent),
                     const SizedBox(width: 8),
-                    _Pill(label: '${book.totalPages} pages', color: AppTheme.textMuted),
+                    _Pill(
+                      label: '${book.totalPages} pages',
+                      color: AppTheme.textMuted),
                   ]),
                   const SizedBox(height: 24),
 
@@ -137,22 +183,35 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                         child: GestureDetector(
                           onTap: () => setState(() {
                             _status = s;
-                            if (s == ReadingStatus.finished) _currentPage = book.totalPages;
-                            if (s == ReadingStatus.wantToRead) _currentPage = 0;
+                            if (s == ReadingStatus.finished) {
+                              _currentPage = book.totalPages;
+                            }
+                            if (s == ReadingStatus.wantToRead) {
+                              _currentPage = 0;
+                            }
                           }),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 180),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
                               color: selected ? accent : AppTheme.card,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: selected ? accent : AppTheme.border),
+                              border: Border.all(
+                                color: selected ? accent : AppTheme.border),
                             ),
                             child: Text(
-                              s == ReadingStatus.wantToRead ? 'Want\nto read'
-                                : s.name[0].toUpperCase() + s.name.substring(1),
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600,
-                                color: selected ? Colors.white : AppTheme.textMuted, height: 1.3),
+                              s == ReadingStatus.wantToRead
+                                  ? 'Want\nto read'
+                                  : s.name[0].toUpperCase() +
+                                      s.name.substring(1),
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: selected
+                                    ? Colors.white
+                                    : AppTheme.textMuted,
+                                height: 1.3),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -167,8 +226,12 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const _Label('Progress'),
-                        Text('Page $_currentPage of ${book.totalPages}',
-                          style: TextStyle(fontSize: 13, color: accent, fontWeight: FontWeight.w600)),
+                        Text(
+                          'Page $_currentPage of ${book.totalPages}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: accent,
+                            fontWeight: FontWeight.w600)),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -182,8 +245,10 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                       ),
                       child: Slider(
                         value: _currentPage.toDouble(),
-                        min: 0, max: book.totalPages.toDouble(),
-                        onChanged: (v) => setState(() => _currentPage = v.round()),
+                        min: 0,
+                        max: book.totalPages.toDouble(),
+                        onChanged: (v) =>
+                            setState(() => _currentPage = v.round()),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -193,12 +258,20 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                     const _Label('Your rating'),
                     const SizedBox(height: 10),
                     Row(children: List.generate(5, (i) => GestureDetector(
-                      onTap: () => setState(() => _rating = (i + 1).toDouble()),
+                      onTap: () =>
+                          setState(() => _rating = (i + 1).toDouble()),
                       child: Padding(
                         padding: const EdgeInsets.only(right: 6),
                         child: Icon(
-                          i < _rating ? Icons.star_rounded : Icons.star_outline_rounded,
-                          size: 36, color: const Color(0xFFD4860B),
+                          i < _rating
+                              ? (isIOS
+                                  ? CupertinoIcons.star_fill
+                                  : Icons.star_rounded)
+                              : (isIOS
+                                  ? CupertinoIcons.star
+                                  : Icons.star_outline_rounded),
+                          size: 36,
+                          color: const Color(0xFFD4860B),
                         ),
                       ),
                     ))),
@@ -212,22 +285,44 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                     maxLines: 4,
                     decoration: const InputDecoration(
                       hintText: 'Key quotes, thoughts, ideas...',
-                      hintStyle: TextStyle(color: AppTheme.textMuted, fontSize: 14),
+                      hintStyle: TextStyle(
+                        color: AppTheme.textMuted, fontSize: 14),
                     ),
                   ),
                   const SizedBox(height: 32),
 
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: _saving ? null : _save,
-                      icon: _saving
-                          ? const SizedBox(width: 18, height: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                          : const Icon(Icons.check_rounded),
-                      label: Text(_saving ? 'Saving…' : 'Save changes'),
-                      style: ElevatedButton.styleFrom(backgroundColor: accent),
-                    ),
+                    child: isIOS
+                        ? CupertinoButton.filled(
+                            onPressed: _saving ? null : _save,
+                            child: _saving
+                                ? const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      CupertinoActivityIndicator(
+                                        color: Colors.white),
+                                      SizedBox(width: 8),
+                                      Text('Saving…'),
+                                    ])
+                                : const Text('Save changes'),
+                          )
+                        : ElevatedButton.icon(
+                            onPressed: _saving ? null : _save,
+                            icon: _saving
+                                ? const SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white))
+                                : const Icon(Icons.check_rounded),
+                            label: Text(
+                              _saving ? 'Saving…' : 'Save changes'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: accent),
+                          ),
                   ),
                   const SizedBox(height: 40),
                 ],
@@ -253,7 +348,9 @@ class _Pill extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       border: Border.all(color: color.withOpacity(0.2)),
     ),
-    child: Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
+    child: Text(label,
+      style: TextStyle(
+        fontSize: 13, fontWeight: FontWeight.w600, color: color)),
   );
 }
 
@@ -264,6 +361,8 @@ class _Label extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(text,
     style: const TextStyle(
-      fontSize: 13, fontWeight: FontWeight.w700,
-      color: AppTheme.textMuted, letterSpacing: 0.5));
+      fontSize: 13,
+      fontWeight: FontWeight.w700,
+      color: AppTheme.textMuted,
+      letterSpacing: 0.5));
 }

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/platform/adaptive.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../domain/entities/book.dart';
 
@@ -21,13 +23,16 @@ class BookCard extends StatelessWidget {
       ),
       child: Row(children: [
         Container(
-          width: 60, height: 80,
+          width: 60,
+          height: 80,
           decoration: BoxDecoration(
             color: accent.withOpacity(0.12),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: accent.withOpacity(0.25)),
           ),
-          child: Center(child: Text(book.coverEmoji, style: const TextStyle(fontSize: 28))),
+          child: Center(
+            child: Text(book.coverEmoji,
+              style: const TextStyle(fontSize: 28))),
         ),
         const SizedBox(width: 14),
         Expanded(
@@ -35,42 +40,69 @@ class BookCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(children: [
-                Expanded(child: Text(book.title,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700,
-                    color: AppTheme.textDark, height: 1.2),
-                  maxLines: 1, overflow: TextOverflow.ellipsis)),
+                Expanded(
+                  child: Text(book.title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textDark,
+                      height: 1.2),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis)),
                 _StatusBadge(status: book.status),
               ]),
               const SizedBox(height: 3),
-              Text(book.author, style: const TextStyle(fontSize: 13, color: AppTheme.textMuted)),
+              Text(book.author,
+                style: const TextStyle(
+                  fontSize: 13, color: AppTheme.textMuted)),
               const SizedBox(height: 10),
               if (book.status == ReadingStatus.reading)
                 Row(children: [
-                  Expanded(child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: book.progress,
-                      backgroundColor: AppTheme.border,
-                      color: accent, minHeight: 5,
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: book.progress,
+                        backgroundColor: AppTheme.border,
+                        color: accent,
+                        minHeight: 5,
+                      ),
                     ),
-                  )),
+                  ),
                   const SizedBox(width: 10),
                   Text('${(book.progress * 100).round()}%',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: accent)),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: accent)),
                 ])
-              else if (book.status == ReadingStatus.finished && book.rating > 0)
+              else if (book.status == ReadingStatus.finished &&
+                  book.rating > 0)
                 Row(children: List.generate(5, (i) => Icon(
-                  i < book.rating.floor() ? Icons.star_rounded : Icons.star_outline_rounded,
-                  size: 16, color: const Color(0xFFD4860B),
+                  i < book.rating.floor()
+                      ? (isIOS
+                          ? CupertinoIcons.star_fill
+                          : Icons.star_rounded)
+                      : (isIOS
+                          ? CupertinoIcons.star
+                          : Icons.star_outline_rounded),
+                  size: 16,
+                  color: const Color(0xFFD4860B),
                 )))
               else
                 Text(book.genre,
-                  style: TextStyle(fontSize: 12, color: accent, fontWeight: FontWeight.w600)),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: accent,
+                    fontWeight: FontWeight.w600)),
             ],
           ),
         ),
         const SizedBox(width: 8),
-        const Icon(Icons.chevron_right_rounded, color: AppTheme.textMuted, size: 20),
+        Icon(
+          isIOS ? CupertinoIcons.chevron_right : Icons.chevron_right_rounded,
+          color: AppTheme.textMuted,
+          size: 20),
       ]),
     ),
   );
@@ -89,8 +121,11 @@ class _StatusBadge extends StatelessWidget {
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
-      child: Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: color)),
+      decoration:
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
+      child: Text(label,
+        style: TextStyle(
+          fontSize: 11, fontWeight: FontWeight.w600, color: color)),
     );
   }
 }
