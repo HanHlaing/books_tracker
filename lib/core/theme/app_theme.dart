@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────
-//  CORE — App theme
-// ─────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
 
 class AppTheme {

@@ -18,7 +18,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.4.8
   riverpod_generator: ^2.3.9
-  flutter_lints: ^3.0.03
+  flutter_lints: ^3.0.2
   flutter_native_splash: ^2.4.0
 
 flutter:

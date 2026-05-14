@@ -1,10 +1,6 @@
-// ─────────────────────────────────────────────
-//  PRESENTATION — Book Detail screen
-// ─────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../domain/entities/book.dart';
 import '../providers/book_provider.dart';
 
@@ -79,7 +75,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // Hero header
           SliverAppBar(
             expandedHeight: 260,
             pinned: true,
@@ -125,7 +120,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Genre + pages
                   Row(children: [
                     _Pill(label: book.genre, color: accent),
                     const SizedBox(width: 8),
@@ -133,7 +127,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                   ]),
                   const SizedBox(height: 24),
 
-                  // Status
                   const _Label('Status'),
                   const SizedBox(height: 10),
                   Row(children: ReadingStatus.values.map((s) {
@@ -169,7 +162,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                   }).toList()),
                   const SizedBox(height: 24),
 
-                  // Progress slider
                   if (_status == ReadingStatus.reading) ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,7 +189,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                     const SizedBox(height: 16),
                   ],
 
-                  // Star rating
                   if (_status == ReadingStatus.finished) ...[
                     const _Label('Your rating'),
                     const SizedBox(height: 10),
@@ -214,7 +205,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                     const SizedBox(height: 24),
                   ],
 
-                  // Notes
                   const _Label('Notes'),
                   const SizedBox(height: 10),
                   TextField(
@@ -227,7 +217,6 @@ class _BookDetailScreenState extends ConsumerState<BookDetailScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Save
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(

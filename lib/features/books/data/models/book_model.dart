@@ -1,10 +1,3 @@
-// ─────────────────────────────────────────────
-//  DATA LAYER — BookModel
-//  Knows how to convert a Book entity to/from
-//  JSON for storage. The domain entity never
-//  knows about JSON or storage formats.
-// ─────────────────────────────────────────────
-
 import '../../domain/entities/book.dart';
 
 class BookModel {

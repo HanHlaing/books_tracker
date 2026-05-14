@@ -1,10 +1,6 @@
-// ─────────────────────────────────────────────
-//  PRESENTATION — Add Book screen
-// ─────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../domain/entities/book.dart';
 import '../providers/book_provider.dart';
 
@@ -77,7 +73,6 @@ class _AddBookScreenState extends ConsumerState<AddBookScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            // Cover preview + pickers
             Center(
               child: Column(children: [
                 Container(

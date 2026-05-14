@@ -1,9 +1,3 @@
-// ─────────────────────────────────────────────
-//  DATA LAYER — Local datasource
-//  Only this file knows about shared_preferences.
-//  Stores the book list as a JSON string array.
-// ─────────────────────────────────────────────
-
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../domain/entities/book.dart';
@@ -15,7 +9,6 @@ class BookLocalDataSource {
   final SharedPreferences _prefs;
   BookLocalDataSource(this._prefs);
 
-  // ── Read ──────────────────────────────────
   Future<List<Book>> getBooks() async {
     final raw = _prefs.getString(_key);
     if (raw == null || raw.isEmpty) return [];
@@ -26,7 +19,6 @@ class BookLocalDataSource {
         .toList();
   }
 
-  // ── Write helpers ─────────────────────────
   Future<void> _saveAll(List<Book> books) async {
     final encoded = jsonEncode(books.map(BookModel.toJson).toList());
     await _prefs.setString(_key, encoded);
@@ -34,7 +26,7 @@ class BookLocalDataSource {
 
   Future<void> addBook(Book book) async {
     final books = await getBooks();
-    books.insert(0, book); // newest first
+    books.insert(0, book);
     await _saveAll(books);
   }
 
@@ -51,7 +43,6 @@ class BookLocalDataSource {
     await _saveAll(books);
   }
 
-  // Seed default data only if storage is empty
   Future<void> seedIfEmpty() async {
     final existing = await getBooks();
     if (existing.isNotEmpty) return;

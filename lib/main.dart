@@ -4,10 +4,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'core/theme.dart';
-import 'data/datasources/book_local_datasource.dart';
-import 'presentation/providers/book_provider.dart';
-import 'presentation/screens/home_screen.dart';
+import 'core/theme/app_theme.dart';
+import 'features/books/data/datasource/book_local_datasource.dart';
+import 'features/books/presentation/providers/book_provider.dart';
+import 'features/books/presentation/screens/home_screen.dart';
 
 Future<void> main() async {
   // 1. Keep native splash visible until we call remove()

@@ -1,9 +1,3 @@
-// ─────────────────────────────────────────────
-//  DOMAIN LAYER — Book entity
-//  Pure Dart. Zero dependencies on Flutter,
-//  packages, or storage. This is the core truth.
-// ─────────────────────────────────────────────
-
 enum ReadingStatus { reading, finished, wantToRead }
 
 extension ReadingStatusX on ReadingStatus {
@@ -34,7 +28,7 @@ class Book {
   final ReadingStatus status;
   final double rating;
   final String notes;
-  final int accentColorValue; // store color as int (Color.value)
+  final int accentColorValue;
 
   const Book({
     required this.id,
@@ -53,7 +47,6 @@ class Book {
   double get progress =>
       totalPages > 0 ? (currentPage / totalPages).clamp(0.0, 1.0) : 0.0;
 
-  // Immutable update — returns a new Book with changed fields
   Book copyWith({
     String? title,
     String? author,
