@@ -21,9 +21,31 @@ dev_dependencies:
   riverpod_generator: ^2.3.9
   flutter_lints: ^3.0.2
   flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon/
+
+# ─────────────────────────────────────────────────────────────
+#  App Icons — run after saving:
+#  dart run flutter_launcher_icons
+# ─────────────────────────────────────────────────────────────
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#1A1A2E"
+  adaptive_icon_foreground: "assets/icon/app_icon.png"
+  remove_alpha_ios: true
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
 
 # ─────────────────────────────────────────────────────────────
 #  Native splash — run this command after saving:

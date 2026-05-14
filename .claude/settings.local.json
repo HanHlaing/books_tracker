@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(flutter analyze *)"
+      "Bash(flutter analyze *)",
+      "Bash(python3 create_icon.py)",
+      "Bash(dart run *)"
     ]
   }
 }
