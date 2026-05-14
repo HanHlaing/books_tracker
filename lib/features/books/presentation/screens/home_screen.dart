@@ -107,6 +107,37 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
         body: body,
+        floatingActionButton: CupertinoButton(
+          onPressed: navigateToAdd,
+          padding: EdgeInsets.zero,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppTheme.primary,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primary.withOpacity(0.35),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(CupertinoIcons.add, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Text('Add book',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  )),
+              ],
+            ),
+          ),
+        ),
       );
     }
 
