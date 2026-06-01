@@ -1,3 +1,9 @@
+# Claude Code
+.claude/
+
+# Flutter project metadata
+.metadata
+
 # Miscellaneous
 *.class
 *.log
